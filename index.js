@@ -1,11 +1,9 @@
 const express = require("express");
-const app = express();
+const exApp = express();
 const port = 3000;
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+exApp.use(express.static("public"));
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+exApp.listen(port, () => {
+  console.log(`Demo app listening at http://localhost:${port}`);
 });
