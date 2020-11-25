@@ -16,5 +16,7 @@ io.on("connection", socket => {
   // listen for msg
   socket.on("chat message", message => {
     console.log(`received: ${message}`);
+    // send message back to everyone who is connected
+    io.emit("chat message", message);
   });
 });
