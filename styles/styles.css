@@ -1,0 +1,91 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  font-size: 2.5rem;
+  margin: 2rem;
+  font-family: Helvetica, Arial, sans-serif;
+  display: grid;
+  grid-template-columns: repeat(2, 6rem);
+  grid-template-rows: 10rem 4rem 10rem;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding-top: 1rem;
+  justify-content: center;
+}
+
+.deck {
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  border-radius: 0.5rem;
+  color: white;
+  font-family: Helvetica, Arial, sans-serif;
+  user-select: none; /* Disable text selecting*/
+}
+
+.text {
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.computer-deck {
+  background: gray;
+}
+
+.player-deck {
+  background: salmon;
+}
+
+.card {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  user-select: none;
+}
+
+.card::before,
+.card::after {
+  position: absolute;
+  content: attr(data-value);
+  /* content attr will get data from data attributes*/
+  font-size: 1rem;
+}
+
+.card::before {
+  top: 1rem;
+  left: 1rem;
+}
+
+.card::after {
+  bottom: 1rem;
+  right: 1rem;
+  transform: rotate(180deg);
+}
+
+.card.red {
+  color: red;
+}
+
+.card.black {
+  color: black;
+}
