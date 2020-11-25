@@ -4,16 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card game demo</title>
+    <script src="/socket.io/socket.io.js" defer></script>
     <script src="scripts/script.js" type="module"></script>
     <link rel="stylesheet" href="styles/styles.css" />
   </head>
   <body>
-    <div class="computer-deck deck"></div>
-    <div class="computer-card-slot card-slot"></div>
-    <div class="text"></div>
-    <div class="player-deck deck"></div>
-    <div class="player-card-slot card-slot">
-      <div class="card black" data-value=""></div>
+    <main>
+      <div class="computer-deck deck"></div>
+      <div class="computer-card-slot card-slot"></div>
+      <div class="text"></div>
+      <div class="player-deck deck"></div>
+      <div class="player-card-slot card-slot">
+        <div class="card black" data-value=""></div>
+      </div>
+    </main>
+    <div>
+      <form id="msgForm" method="post" action="">
+        <input type="text" id="msgInput" name="msgInput" />
+        <button type="submit">Send message</button>
+      </form>
     </div>
   </body>
 </html>

@@ -1,118 +1,152 @@
 import Deck, { Card } from "./deck.js";
 
-const CARD_VALUE_MAP = {
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5,
-  6: 6,
-  7: 7,
-  8: 8,
-  9: 9,
-  10: 10,
-  J: 11,
-  Q: 12,
-  K: 13,
-  A: 14,
-};
+{
+  //init socket var
+  let socket;
+  socket = io();
 
-const $computerCardSlot = document.querySelector(".computer-card-slot");
-const $playerCardSlot = document.querySelector(".player-card-slot");
-const $computerDeckElement = document.querySelector(".computer-deck");
-const $playerDeckElement = document.querySelector(".player-deck");
-const $text = document.querySelector(".text");
+  const init = () => {
+    // game code
+    const game = () => {
+      const CARD_VALUE_MAP = {
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 6,
+        7: 7,
+        8: 8,
+        9: 9,
+        10: 10,
+        J: 11,
+        Q: 12,
+        K: 13,
+        A: 14,
+      };
 
-let playerDeck, computerDeck, inRound, stop;
+      const $computerCardSlot = document.querySelector(".computer-card-slot");
+      const $playerCardSlot = document.querySelector(".player-card-slot");
+      const $computerDeckElement = document.querySelector(".computer-deck");
+      const $playerDeckElement = document.querySelector(".player-deck");
+      const $main = document.querySelector("main");
+      const $text = document.querySelector(".text");
 
-document.addEventListener("click", () => {
-  if (stop) {
-    startGame();
-    return;
-  }
-  if (inRound) {
-    cleanBeforeRound();
-  } else {
-    flipCards();
-  }
-});
+      let playerDeck, computerDeck, inRound, stop;
 
-const flipCards = () => {
-  inRound = true;
+      $main.addEventListener("click", () => {
+        if (stop) {
+          startGame();
+          return;
+        }
+        if (inRound) {
+          cleanBeforeRound();
+        } else {
+          flipCards();
+        }
+      });
 
-  const playerCard = playerDeck.pop();
-  const computerCard = computerDeck.pop();
+      const flipCards = () => {
+        inRound = true;
 
-  $playerCardSlot.appendChild(playerCard.getHTML());
-  $computerCardSlot.appendChild(computerCard.getHTML());
+        const playerCard = playerDeck.pop();
+        const computerCard = computerDeck.pop();
 
-  updateDeckCount();
+        $playerCardSlot.appendChild(playerCard.getHTML());
+        $computerCardSlot.appendChild(computerCard.getHTML());
 
-  if (isRoundWinner(playerCard, computerCard)) {
-    $text.textContent = "Win";
-    playerDeck.push(playerCard);
-    playerDeck.push(computerCard);
-  } else if (isRoundWinner(computerCard, playerCard)) {
-    $text.textContent = "Lose";
-    computerDeck.push(playerCard);
-    computerDeck.push(computerCard);
-  } else {
-    $text.textContent = "Draw";
-    playerDeck.push(playerCard);
-    computerDeck.push(computerCard);
-  }
+        updateDeckCount();
 
-  if (isGameOver(playerDeck)) {
-    $text.textContent = "You Lose!";
-    stop = true;
-  } else if (isGameOver(computerDeck)) {
-    $text.textContent = "You Win!";
-    stop = true;
-  }
-};
+        if (isRoundWinner(playerCard, computerCard)) {
+          $text.textContent = "Win";
+          playerDeck.push(playerCard);
+          playerDeck.push(computerCard);
+        } else if (isRoundWinner(computerCard, playerCard)) {
+          $text.textContent = "Lose";
+          computerDeck.push(playerCard);
+          computerDeck.push(computerCard);
+        } else {
+          $text.textContent = "Draw";
+          playerDeck.push(playerCard);
+          computerDeck.push(computerCard);
+        }
 
-const updateDeckCount = () => {
-  $computerDeckElement.textContent = computerDeck.numOfCards;
-  $playerDeckElement.textContent = playerDeck.numOfCards;
-};
+        if (isGameOver(playerDeck)) {
+          $text.textContent = "You Lose!";
+          stop = true;
+        } else if (isGameOver(computerDeck)) {
+          $text.textContent = "You Win!";
+          stop = true;
+        }
+      };
 
-const cleanBeforeRound = () => {
-  inRound = false;
-  $text.textContent = "";
-  $computerCardSlot.innerHTML = "";
-  $playerCardSlot.innerHTML = "";
+      const updateDeckCount = () => {
+        $computerDeckElement.textContent = computerDeck.numOfCards;
+        $playerDeckElement.textContent = playerDeck.numOfCards;
+      };
 
-  updateDeckCount();
-};
+      const cleanBeforeRound = () => {
+        inRound = false;
+        $text.textContent = "";
+        $computerCardSlot.innerHTML = "";
+        $playerCardSlot.innerHTML = "";
 
-const isRoundWinner = (cardOne, cardTwo) => {
-  return CARD_VALUE_MAP[cardOne.value] > CARD_VALUE_MAP[cardTwo.value];
-};
+        updateDeckCount();
+      };
 
-const isGameOver = deck => {
-  return deck.numOfCards === 0;
-};
+      const isRoundWinner = (cardOne, cardTwo) => {
+        return CARD_VALUE_MAP[cardOne.value] > CARD_VALUE_MAP[cardTwo.value];
+      };
 
-const startGame = () => {
-  const deck = new Deck();
-  // shuffle cards in random order
-  deck.shuffle();
+      const isGameOver = deck => {
+        return deck.numOfCards === 0;
+      };
 
-  //console.log(deck.cards);
-  // distribute cards evenly between players
-  const deckMidPoint = Math.ceil(deck.numOfCards / 2);
-  playerDeck = new Deck(deck.cards.slice(0, deckMidPoint));
-  computerDeck = new Deck(deck.cards.slice(deckMidPoint, deck.numOfCards));
-  //computerDeck = new Deck([new Card("S", 2)]);
+      const startGame = () => {
+        const deck = new Deck();
+        // shuffle cards in random order
+        deck.shuffle();
 
-  inRound = false;
-  stop = false;
+        //console.log(deck.cards);
+        // distribute cards evenly between players
+        const deckMidPoint = Math.ceil(deck.numOfCards / 2);
+        playerDeck = new Deck(deck.cards.slice(0, deckMidPoint));
+        computerDeck = new Deck(
+          deck.cards.slice(deckMidPoint, deck.numOfCards)
+        );
+        //computerDeck = new Deck([new Card("S", 2)]);
 
-  console.log(playerDeck);
-  console.log(computerDeck);
+        inRound = false;
+        stop = false;
 
-  cleanBeforeRound();
+        console.log(playerDeck);
+        console.log(computerDeck);
 
-  //   $computerCardSlot.appendChild(deck.cards[0].getHTML());
-};
+        cleanBeforeRound();
 
-startGame();
+        //   $computerCardSlot.appendChild(deck.cards[0].getHTML());
+      };
+
+      startGame();
+    };
+
+    // multiplayer code
+    const mp = () => {
+      //get message form
+      const $msgForm = document.getElementById("msgForm");
+      const $msgInput = document.getElementById("msgInput");
+
+      //listen for submit event on form
+      $msgForm.addEventListener("submit", e => {
+        e.preventDefault();
+        //emit the msg
+        socket.emit("chat message", $msgInput.value);
+        $msgForm.reset();
+      });
+    };
+
+    game();
+    mp();
+  };
+
+  init();
+}
