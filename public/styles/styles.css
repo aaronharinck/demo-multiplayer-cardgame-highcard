@@ -31,6 +31,10 @@ main {
   text-align: center;
 }
 
+.chatForm + .chatForm {
+  margin-top: 0.5rem;
+}
+
 .messages {
   max-width: 60rem;
   margin: 2rem auto;
