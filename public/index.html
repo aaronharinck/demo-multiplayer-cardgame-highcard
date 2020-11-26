@@ -19,7 +19,16 @@
       </div>
     </main>
     <div>
-      <form id="msgForm" method="post" action="">
+      <form id="nameForm" class="chatForm" method="post" action="">
+        <input
+          type="text"
+          id="nameInput"
+          name="nameInput"
+          placeholder="pick a username"
+        />
+        <button type="submit">Login</button>
+      </form>
+      <form id="msgForm" class="chatForm" method="post" action="">
         <input type="text" id="msgInput" name="msgInput" />
         <button type="submit">Send message</button>
       </form>

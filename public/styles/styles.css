@@ -23,7 +23,7 @@ main {
   justify-content: center;
 }
 
-#msgForm {
+.chatForm {
   display: block;
   width: 50%;
   margin: 0 auto;

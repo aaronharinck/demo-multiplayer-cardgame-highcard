@@ -136,6 +136,16 @@ import Deck, { Card } from "./deck.js";
       const $msgInput = document.getElementById("msgInput");
       //get chat element to display msges
       const $messagesList = document.querySelector(".messagesList");
+      //get name form
+      const $nameForm = document.getElementById("nameForm");
+      const $nameInput = document.getElementById("nameInput");
+
+      //login in: listen for submit event on nameForm
+      $nameForm.addEventListener("submit", e => {
+        e.preventDefault();
+        //emit the name
+        socket.emit("name", $nameInput.value);
+      });
 
       //sending a msg: listen for submit event on form
       $msgForm.addEventListener("submit", e => {
@@ -146,12 +156,13 @@ import Deck, { Card } from "./deck.js";
       });
 
       //receiving msgs: listen for incoming msgs
-      socket.on("chat message", message => {
+      socket.on("chat message", (client, message) => {
         console.log(`Received: ${message}`);
+        console.log(client);
 
         // Display Chat
         const $el = document.createElement("li");
-        $el.textContent = message;
+        $el.textContent = `${client.name}: ${message}`;
         $messagesList.appendChild($el);
       });
     };
