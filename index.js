@@ -27,7 +27,37 @@ io.on("connection", socket => {
   // listen for login (name)
   socket.on("name", name => {
     console.log(`Name: ${name}`);
+
+    if (name) {
+      // trim unwanted characters
+      name = name.match(/[A-Z-a-z-0-9]/g);
+      // join the array of remaining letters
+      name = name.join("");
+      console.log(`Name: ${name}`);
+    }
+    if (name.length === 0) {
+      socket.emit("name-error", "please enter a valid name");
+      return;
+    }
+
+    // check if name is not already in use
+    let nameInUse = false;
+    for (const socketId in clients) {
+      if (clients.hasOwnProperty(socketId)) {
+        const otherClient = clients[socketId];
+        if (otherClient.name === name) {
+          nameInUse = true;
+        }
+      }
+    }
+
+    if (nameInUse) {
+      socket.emit("name-error", "name is already in use");
+      return;
+    }
+
     clients[socket.id].name = name;
+    socket.emit("name", clients[socket.id]);
   });
 
   // listen for msg

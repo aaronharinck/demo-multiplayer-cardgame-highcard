@@ -147,6 +147,14 @@ import Deck, { Card } from "./deck.js";
         socket.emit("name", $nameInput.value);
       });
 
+      socket.on("name-error", error => {
+        console.log(error);
+      });
+
+      socket.on("name", client => {
+        console.log("you are now named", client.name);
+      });
+
       //sending a msg: listen for submit event on form
       $msgForm.addEventListener("submit", e => {
         e.preventDefault();
