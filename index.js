@@ -4,6 +4,17 @@ const http = require("http").createServer(exApp);
 const io = require("socket.io")(http);
 const port = process.env.PORT || 3000;
 
+/* TEST */
+//game
+const test = require("./server_scripts/test");
+const testVal = test.testje();
+console.log(testVal);
+
+const deck = new test.Deck();
+// shuffle cards in random order
+deck.shuffle();
+console.log(deck);
+
 exApp.use(express.static("public"));
 
 http.listen(port, () => {
@@ -26,14 +37,14 @@ io.on("connection", socket => {
 
   // listen for login (name)
   socket.on("name", name => {
-    console.log(`Name: ${name}`);
+    console.log(`unSanitized name: ${name}`);
 
     if (name) {
       // trim unwanted characters
       name = name.match(/[A-Z-a-z-0-9]/g);
       // join the array of remaining letters
       name = name.join("");
-      console.log(`Name: ${name}`);
+      console.log(`Sanitized name: ${name}`);
     }
     if (name.length === 0) {
       socket.emit("name-error", "please enter a valid name");
@@ -66,6 +77,7 @@ io.on("connection", socket => {
     // send message back to everyone who is connected
     if (clients[socket.id].name) {
       io.emit("chat message", clients[socket.id], message);
+      io.emit("test", testVal);
     }
   });
 });

@@ -173,6 +173,14 @@ import Deck, { Card } from "./deck.js";
         $el.textContent = `${client.name}: ${message}`;
         $messagesList.appendChild($el);
       });
+
+      //receiving test
+      socket.on("test", test => {
+        console.log(test);
+        const $el = document.createElement("li");
+        $el.textContent = `${test}`;
+        $messagesList.appendChild($el);
+      });
     };
 
     game();
